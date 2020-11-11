@@ -268,8 +268,6 @@ namespace CoCaro
 
                 foreach (O_Co _O_co in Stack_Cac_Nuoc_Da_Di)
                 {
-
-
                     if (Duyet_Doc(_O_co.Row, _O_co.Column, _O_co.Own) == true || Duyet_Ngang(_O_co.Row, _O_co.Column, _O_co.Own) == true ||
                         Duyet_Cheo_Nguoc(_O_co.Row, _O_co.Column, _O_co.Own) == true || Duyet_Cheo_Xuoi(_O_co.Row, _O_co.Column, _O_co.Own) == true)
                     {
@@ -287,10 +285,17 @@ namespace CoCaro
                         else if (_Che_Do_Choi == 3)
                         {
                             {
-                                if (_O_co.Own == 1)
-                                    diem1++;
-                                if (_O_co.Own == 2)
-                                    diem2++;
+                                if(Duyet_Doc(_O_co.Row, _O_co.Column, _O_co.Own) == true)
+                                {
+                                    int Dem;
+                                    for (Dem = 1; Dem < 5; Dem++)
+                                    {
+                                        if(_O_co.Own==1)
+                                            _Mang_O_Co[_O_co.Row + Dem, _O_co.Column].Own = 3;
+                                        else
+                                            _Mang_O_Co[_O_co.Row + Dem, _O_co.Column].Own = 4;
+                                    }
+                                }
                                 if (diem1 == 7)
                                     _Ket_Thuc = 1;
                                 else if (diem2 == 7)
@@ -302,7 +307,7 @@ namespace CoCaro
 
                     }
                 }
-                                 return false;
+                return false;
             }
             else 
             {
@@ -325,11 +330,12 @@ namespace CoCaro
                         else if (_Che_Do_Choi == 3)
                         {
                             {
-
+                                /*
                                 if (_O_co.Own == 1)
                                     diem1++;
                                 if (_O_co.Own == 2)
                                     diem2++;
+                                    */
                                 if (diem1 == 7)
                                     _Ket_Thuc = 1;
                                 else if (diem2 == 7)
@@ -409,7 +415,6 @@ namespace CoCaro
         #region Duyet:Caro
         public bool Duyet_Doc_C(int crRow, int crColumn, int crOwn)
         {
-            int test = crOwn == 1 ? 2 : 1;
             if (crRow > _Ban_Co.NRow - 5)
                 return false;
             int Dem;
@@ -420,13 +425,13 @@ namespace CoCaro
             }
             if (crRow == 0 || crRow + Dem == _Ban_Co.NRow)
                 return true;
-            if (_Mang_O_Co[crRow - 1, crColumn].Own != crOwn && _Mang_O_Co[crRow + 5, crColumn].Own != crOwn && _Mang_O_Co[crRow - 1, crColumn].Own == test && _Mang_O_Co[crRow + 5, crColumn].Own == test)
+            if (_Mang_O_Co[crRow - 1, crColumn].Own == 0 || _Mang_O_Co[crRow + 5, crColumn].Own == 0)
+                return true;
+            else
                 return false;
-            return true;
         }
         public bool Duyet_Ngang_C(int crRow, int crColumn, int crOwn)
         {
-            int test = crOwn == 1 ? 2 : 1;
             if (crColumn > _Ban_Co.NCoLumn - 5)
                 return false;
             int Dem;
@@ -437,13 +442,13 @@ namespace CoCaro
             }
             if (crColumn == 0 || crColumn + Dem == _Ban_Co.NCoLumn)
                 return true;
-            if (_Mang_O_Co[crRow, crColumn - 1].Own != crOwn && _Mang_O_Co[crRow, crColumn + 5].Own != crOwn && _Mang_O_Co[crRow, crColumn - 1].Own == test && _Mang_O_Co[crRow, crColumn + 5].Own == test)
+            if (_Mang_O_Co[crRow, crColumn - 1].Own == 0 || _Mang_O_Co[crRow, crColumn + 5].Own == 0)
+                return true;
+            else
                 return false;
-            return true;
         }
         public bool Duyet_Cheo_Nguoc_C(int crRow, int crColumn, int crOwn)
         {
-            int test = crOwn == 1 ? 2 : 1;
             if (crRow < 4 || crColumn > _Ban_Co.NCoLumn - 5)
                 return false;
             int Dem;
@@ -454,13 +459,13 @@ namespace CoCaro
             }
             if (crRow == 4 || crRow == _Ban_Co.NRow - 1 || crColumn == 0 || crColumn + Dem == _Ban_Co.NCoLumn)
                 return true;
-            if (_Mang_O_Co[crRow + 1, crColumn - 1].Own != crOwn && _Mang_O_Co[crRow - 5, crColumn + 5].Own != crOwn && _Mang_O_Co[crRow + 1, crColumn - 1].Own == test && _Mang_O_Co[crRow - 5, crColumn + 5].Own == test)
+            if (_Mang_O_Co[crRow + 1, crColumn - 1].Own == 0 || _Mang_O_Co[crRow - 5, crColumn + 5].Own == 0 )
+                return true;
+            else
                 return false;
-            return true;
         }
         public bool Duyet_Cheo_Xuoi_C(int crRow, int crColumn, int crOwn)
         {
-            int test = crOwn == 1 ? 2 : 1;
             if (crRow > _Ban_Co.NRow - 5 || crColumn > _Ban_Co.NCoLumn - 5)
                 return false;
             int Dem;
@@ -471,9 +476,10 @@ namespace CoCaro
             }
             if (crRow == 0 || crRow + Dem == _Ban_Co.NRow || crColumn == 0 || crColumn + Dem == _Ban_Co.NCoLumn)
                 return true;
-            if (_Mang_O_Co[crRow - 1, crColumn - 1].Own != crOwn && _Mang_O_Co[crRow + 5, crColumn + 5].Own != crOwn && _Mang_O_Co[crRow - 1, crColumn - 1].Own == test && _Mang_O_Co[crRow + 5, crColumn + 5].Own == test)
+            if (_Mang_O_Co[crRow - 1, crColumn - 1].Own == 0 || _Mang_O_Co[crRow + 5, crColumn + 5].Own == 0)
+                return true;
+            else
                 return false;
-            return true;
         }
         #endregion
         #endregion
